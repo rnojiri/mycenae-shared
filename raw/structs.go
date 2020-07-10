@@ -9,14 +9,14 @@ import (
 // author: rnojiri
 //
 
-// Metadata - the raw data (metadata only)
+// Metadata - the raw data (metric and tags only)
 type Metadata struct {
 	Metric string            `json:"metric"`
 	Tags   map[string]string `json:"tags"`
 }
 
-// DataQuery - the raw data query JSON
-type DataQuery struct {
+// Query - the raw data query JSON
+type Query struct {
 	Metadata
 	Type         string `json:"type"`
 	Since        string `json:"since"`
@@ -46,38 +46,38 @@ var (
 	ErrMissingMandatoryFields error = errors.New("mandatory fields are missing")
 )
 
-// DataNumberPoint - represents a raw number point result
-type DataNumberPoint struct {
+// NumberPoint - represents a raw number point result
+type NumberPoint struct {
 	Timestamp int64   `json:"timestamp"`
 	Value     float64 `json:"value"`
 }
 
-// DataTextPoint - represents a raw text point result
-type DataTextPoint struct {
+// TextPoint - represents a raw text point result
+type TextPoint struct {
 	Timestamp int64  `json:"timestamp"`
 	Text      string `json:"text"`
 }
 
-// DataQueryNumberPoints - the metadata and value results
-type DataQueryNumberPoints struct {
-	Metadata Metadata          `json:"metadata"`
-	Values   []DataNumberPoint `json:"points"`
+// NumberPoints - the metadata and value results
+type NumberPoints struct {
+	Metadata Metadata      `json:"metadata"`
+	Values   []NumberPoint `json:"points"`
 }
 
-// DataQueryTextPoints - the metadata and text results
-type DataQueryTextPoints struct {
-	Metadata Metadata        `json:"metadata"`
-	Texts    []DataTextPoint `json:"points"`
+// TextPoints - the metadata and text results
+type TextPoints struct {
+	Metadata Metadata    `json:"metadata"`
+	Texts    []TextPoint `json:"points"`
 }
 
-// DataQueryNumberResults - the final raw query number results
-type DataQueryNumberResults struct {
-	Results []DataQueryNumberPoints `json:"results"`
-	Total   int                     `json:"total"`
+// NumberQueryResults - the final raw query number results
+type NumberQueryResults struct {
+	Results []NumberPoints `json:"results"`
+	Total   int            `json:"total"`
 }
 
-// DataQueryTextResults - the final raw query text results
-type DataQueryTextResults struct {
-	Results []DataQueryTextPoints `json:"results"`
-	Total   int                   `json:"total"`
+// TextQueryResults - the final raw query text results
+type TextQueryResults struct {
+	Results []TextPoints `json:"results"`
+	Total   int          `json:"total"`
 }
