@@ -10,7 +10,7 @@ import (
 //
 
 // Parse - parses the bytes tol JSON
-func (dq *DataQuery) Parse(data []byte) error {
+func (dq *Query) Parse(data []byte) error {
 
 	var err error
 
