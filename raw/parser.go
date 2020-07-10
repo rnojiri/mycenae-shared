@@ -1,45 +1,44 @@
 package raw
 
 import (
-	"io/ioutil"
-	"net/http"
-
 	"github.com/buger/jsonparser"
 )
 
+//
+// The raw query json parser.
+// author: rnojiri
+//
+
 // Parse - parses the bytes tol JSON
-func (rq *DataQuery) Parse(r *http.Request) error {
+func (dq *DataQuery) Parse(data []byte) error {
 
-	data, err := ioutil.ReadAll(r.Body)
-	if err != nil {
+	var err error
+
+	if dq.Type, err = jsonparser.GetString(data, rawDataQueryTypeParam); err != nil {
 		return ErrUnmarshalling
 	}
 
-	if rq.Type, err = jsonparser.GetString(data, rawDataQueryTypeParam); err != nil {
-		return ErrUnmarshalling
-	}
-
-	if rq.Type != rawDataQueryNumberType && rq.Type != rawDataQueryTextType {
+	if dq.Type != rawDataQueryNumberType && dq.Type != rawDataQueryTextType {
 		return ErrMissingMandatoryFields
 	}
 
-	if rq.Metric, err = jsonparser.GetString(data, rawDataQueryMetricParam); err != nil {
+	if dq.Metric, err = jsonparser.GetString(data, rawDataQueryMetricParam); err != nil {
 		return ErrUnmarshalling
 	}
 
-	if rq.Since, err = jsonparser.GetString(data, rawDataQuerySinceParam); err != nil {
+	if dq.Since, err = jsonparser.GetString(data, rawDataQuerySinceParam); err != nil {
 		return ErrUnmarshalling
 	}
 
-	if rq.Until, err = jsonparser.GetString(data, rawDataQueryUntilParam); err != nil && err != jsonparser.KeyPathNotFoundError {
+	if dq.Until, err = jsonparser.GetString(data, rawDataQueryUntilParam); err != nil && err != jsonparser.KeyPathNotFoundError {
 		return ErrUnmarshalling
 	}
 
-	if rq.EstimateSize, err = jsonparser.GetBoolean(data, rawDataQueryEstimateSize); err != nil && err != jsonparser.KeyPathNotFoundError {
+	if dq.EstimateSize, err = jsonparser.GetBoolean(data, rawDataQueryEstimateSize); err != nil && err != jsonparser.KeyPathNotFoundError {
 		return ErrUnmarshalling
 	}
 
-	rq.Tags = map[string]string{}
+	dq.Tags = map[string]string{}
 	err = jsonparser.ObjectEach(data, func(key, value []byte, dataType jsonparser.ValueType, offset int) error {
 
 		tagKey, err := jsonparser.ParseString(key)
@@ -47,7 +46,7 @@ func (rq *DataQuery) Parse(r *http.Request) error {
 			return ErrUnmarshalling
 		}
 
-		if rq.Tags[tagKey], err = jsonparser.ParseString(value); err != nil {
+		if dq.Tags[tagKey], err = jsonparser.ParseString(value); err != nil {
 			return ErrUnmarshalling
 		}
 
@@ -55,7 +54,7 @@ func (rq *DataQuery) Parse(r *http.Request) error {
 
 	}, rawDataQueryTagsParam)
 
-	if _, ok := rq.Tags[rawDataQueryKSID]; !ok {
+	if _, ok := dq.Tags[rawDataQueryKSID]; !ok {
 		return ErrMissingMandatoryFields
 	}
 

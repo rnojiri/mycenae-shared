@@ -4,6 +4,11 @@ import (
 	"errors"
 )
 
+//
+// The raw query related structs.
+// author: rnojiri
+//
+
 // DataMetadata - the raw data (metadata only)
 type DataMetadata struct {
 	Metric string            `json:"metric"`
