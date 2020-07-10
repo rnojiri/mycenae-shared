@@ -9,15 +9,15 @@ import (
 // author: rnojiri
 //
 
-// DataMetadata - the raw data (metadata only)
-type DataMetadata struct {
+// Metadata - the raw data (metadata only)
+type Metadata struct {
 	Metric string            `json:"metric"`
 	Tags   map[string]string `json:"tags"`
 }
 
 // DataQuery - the raw data query JSON
 type DataQuery struct {
-	DataMetadata
+	Metadata
 	Type         string `json:"type"`
 	Since        string `json:"since"`
 	Until        string `json:"until"`
@@ -60,13 +60,13 @@ type DataTextPoint struct {
 
 // DataQueryNumberPoints - the metadata and value results
 type DataQueryNumberPoints struct {
-	Metadata DataMetadata      `json:"metadata"`
+	Metadata Metadata          `json:"metadata"`
 	Values   []DataNumberPoint `json:"points"`
 }
 
 // DataQueryTextPoints - the metadata and text results
 type DataQueryTextPoints struct {
-	Metadata DataMetadata    `json:"metadata"`
+	Metadata Metadata        `json:"metadata"`
 	Texts    []DataTextPoint `json:"points"`
 }
 
